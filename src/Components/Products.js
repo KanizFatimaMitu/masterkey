@@ -33,9 +33,10 @@ export default function Products() {
 
     return (
         <div className="hero min-h-[370px] ">
-            <div className="hero-content flex-col lg:flex-row-reverse">
-            <h1 className="text-5xl font-bold">we picked some <span className="font-bold text-warning">cool things</span> for you!</h1>
-                <div className="grid grid-cols-3">
+            <div className="hero-content flex-col lg:flex-row">
+            <h1 className="text-5xl font-bold w-64">we picked some <span className="font-bold text-warning">cool things</span> for you!</h1>
+                <div>
+                    <p className="font-bold">Hot deals for you</p>
                     {content}
                    
                 </div>

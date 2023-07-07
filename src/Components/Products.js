@@ -1,97 +1,45 @@
-import React from 'react';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../Features/ProductSlice.";
+import Loading from "../ui/Loading";
+import Product from "./Product";
 
-const Products = () => {
+export default function Products() {
+    const dispatch = useDispatch();
+    const { products, isLoading, isError, error } = useSelector(
+        (state) => state.products
+    );
+
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
+
+    // decide what to render
+    let content;
+
+    if (isLoading) content = <Loading />;
+    if (!isLoading && isError)
+        content = <div className="col-span-12">{error}</div>;
+
+    if (!isError && !isLoading && products?.length === 0) {
+        content = <div className="col-span-12">No products found!</div>;
+    }
+
+    if (!isError && !isLoading && products?.length > 0) {
+        content = products.map((product) => (
+            <Product key={product.productData._id} product={product} />
+        ));
+    }
+
     return (
-        <div>
-            <div className="hero min-h-[370PX] ">
-                <div className="hero-content flex-col lg:flex-row">
-                    <h1 className="text-5xl">WE PICKED SOME <span className='font-bold text-warning'>COOL THINGS</span> FOR YOU !</h1>
-                    <div>
-
-                        <p className="py-6 font-bold">Hot deals for you</p>
-                        <div className='grid grid-cols-3 gap-4'>
-
-                            <div className="card">
-                                <figure><img src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
-                                <div className="card-body">
-                                    <h2 className="card-title">
-                                        Shoes!
-                                        <div className="badge badge-secondary">NEW</div>
-                                    </h2>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div className="card-actions justify-end">
-                                        <div className="badge badge-outline">Fashion</div>
-                                        <div className="badge badge-outline">Products</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="card">
-                                <figure><img src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
-                                <div className="card-body">
-                                    <h2 className="card-title">
-                                        Shoes!
-                                        <div className="badge badge-secondary">NEW</div>
-                                    </h2>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div className="card-actions justify-end">
-                                        <div className="badge badge-outline">Fashion</div>
-                                        <div className="badge badge-outline">Products</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="card ">
-                                <figure><img src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
-                                <div className="card-body">
-                                    <h2 className="card-title">
-                                        Shoes!
-                                        <div className="badge badge-secondary">NEW</div>
-                                    </h2>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div className="card-actions justify-end">
-                                        <div className="badge badge-outline">Fashion</div>
-                                        <div className="badge badge-outline">Products</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="card ">
-                                <figure><img src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
-                                <div className="card-body">
-                                    <h2 className="card-title">
-                                        Shoes!
-                                        <div className="badge badge-secondary">NEW</div>
-                                    </h2>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div className="card-actions justify-end">
-                                        <div className="badge badge-outline">Fashion</div>
-                                        <div className="badge badge-outline">Products</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="card ">
-                                <figure><img src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
-                                <div className="card-body">
-                                    <h2 className="card-title">
-                                        Shoes!
-                                        <div className="badge badge-secondary">NEW</div>
-                                    </h2>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div className="card-actions justify-end">
-                                        <div className="badge badge-outline">Fashion</div>
-                                        <div className="badge badge-outline">Products</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
+        <div className="hero min-h-[370px] ">
+            <div className="hero-content flex-col lg:flex-row-reverse">
+            <h1 className="text-5xl font-bold">we picked some <span className="font-bold text-warning">cool things</span> for you!</h1>
+                <div className="grid grid-cols-3">
+                    {content}
+                   
                 </div>
             </div>
         </div>
     );
-};
-
-export default Products;
+}
